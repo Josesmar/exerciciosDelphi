@@ -6,7 +6,6 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, CheckLst, ExtCtrls, uVeiculo,
   Generics.Collections;
-
 type
   TfrmVeiculo = class(TForm)
 
@@ -34,7 +33,6 @@ type
   public
     { Public declarations }
     function cores(): String;
-    function criarVeiculo(criarNovoVeiculo: TVeiculo): TObjectList<TVeiculo>;
   end;
 
 var
@@ -53,55 +51,54 @@ begin
     mmVeiculo.Lines.Add(veiculo.acelerar());
   end
   else
-    MessageDlg('Veiculo ainda n�o criado.', mtInformation, [mbOK], 0);
-  edtModeloVeiculo.SetFocus;
-  Abort;
+    MessageDlg('Não existe veículo criado!', mtInformation, [mbOK], 0);
+    //Matém o foco no campo Modelo Veículo
+    edtModeloVeiculo.SetFocus;
+    Abort;
 end;
 
 procedure TfrmVeiculo.btnCriarVeiculoClick(Sender: TObject);
 begin
-  // Valida��o da obrigat�riedade do campo modelo
+  // Validação da obrigatóriedade do campo modelo
   if edtModeloVeiculo.Text = '' then
   begin
-    MessageDlg('Campo modelo obrigat�rio', mtInformation, [mbOK], 0);
+    MessageDlg('Modelo do veículo obrigatório', mtInformation, [mbOK], 0);
     edtModeloVeiculo.SetFocus;
     Abort;
   end
   else if cbxTipo.ItemIndex = -1 then
   begin
-    MessageDlg('Campo Tipo obrigat�rio', mtInformation, [mbOK], 0);
+    MessageDlg('Tipo de veículo obrigatório', mtInformation, [mbOK], 0);
     // Manter o foco no campo cbxTipo
     cbxTipo.SetFocus;
     Abort;
   end
   else if rdCambio.ItemIndex = -1 then
   begin
-    MessageDlg('Campo C�mbio obrigat�rio para esse tipo de ve�culo',
-      mtInformation, [mbOK], 0);
+    MessageDlg('Câmbio obrigatório para esse tipo de veículo',mtInformation, [mbOK], 0);
     rdCambio.SetFocus;
     Abort;
   end;
-
-  veiculo := TVeiculo.creat(TTipoEnum(cbxTipo.ItemIndex),
-    edtModeloVeiculo.Text, rdCambio.Items[rdCambio.ItemIndex], cores());
-
-  veiculoCriado := True;
-  mmVeiculo.Lines.Clear;
-  mmVeiculo.Lines.Add(veiculo.ToString());
-  criarVeiculo(veiculo);
-
+  try
+    veiculo := TVeiculo.creat(uVeiculo.TTipoEnum(cbxTipo.ItemIndex), edtModeloVeiculo.Text, rdCambio.Items[rdCambio.ItemIndex], cores());
+    veiculoCriado := True;
+    mmVeiculo.Lines.Clear;
+    mmVeiculo.Lines.Add(veiculo.dadosMemo());
+  finally
+    FreeAndNil(veiculo);
+  end;
 end;
 
 procedure TfrmVeiculo.btnEstacionarClick(Sender: TObject);
 begin
   if veiculoCriado = True then
   begin
-    mmVeiculo.Lines.Add(veiculo.estacionar());
+    veiculo.estacionar(mmVeiculo);
   end
   else
-    MessageDlg('Veiculo ainda n�o criado', mtInformation, [mbOK], 0);
-  edtModeloVeiculo.SetFocus;
-  Abort;
+    MessageDlg('Veiculo ainda não criado', mtInformation, [mbOK], 0);
+    edtModeloVeiculo.SetFocus;
+    Abort;
 end;
 
 procedure TfrmVeiculo.btnFrearClick(Sender: TObject);
@@ -111,13 +108,14 @@ begin
     mmVeiculo.Lines.Add(veiculo.frear());
   end
   else
-    MessageDlg('Veiculo ainda n�o criado', mtInformation, [mbOK], 0);
-  edtModeloVeiculo.SetFocus;
-  Abort;
+    MessageDlg('Veiculo ainda não criado', mtInformation, [mbOK], 0);
+    edtModeloVeiculo.SetFocus;
+    Abort;
 end;
 
 procedure TfrmVeiculo.cbxTipoChange(Sender: TObject);
 begin
+  rdCambio.ItemIndex := -1;
   if cbxTipo.ItemIndex = 0 then
   begin
     TRadioGroup(rdCambio.Components[0]).Enabled := False;
@@ -139,27 +137,18 @@ var
   cores: String;
 begin
   cores := '';
-
   for contador := 0 to ckbCores.Count - 1 do
   begin
     if ckbCores.Checked[contador] then
+    begin
       cores := cores + ',' + ckbCores.Items[contador];
+    end;
   end;
-
-  if cores <> '' then
-    Delete(cores, 1, 1);
-
-  Result := cores;
-end;
-
-function TfrmVeiculo.criarVeiculo(criarNovoVeiculo: TVeiculo)
-  : TObjectList<TVeiculo>;
-var
-  I: Integer;
-begin
-  listaVeiculoCriado.Add(criarNovoVeiculo);
-  Result := listaVeiculoCriado;
-
+   if cores <> '' then
+   begin
+     Delete(cores, 1, 1);
+     Result := cores;
+   end;
 end;
 
 procedure TfrmVeiculo.FormClose(Sender: TObject; var Action: TCloseAction);

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <Transactions>
+    <Transaction>2019/11/17 07:46:15.624.pas,C:\Users\Maiara\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Maiara\Documents\RAD Studio\Projects\ExercicioDelphi\frmPrincipal.pas</Transaction>
+    <Transaction>2019/11/17 07:46:15.624.dfm,C:\Users\Maiara\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Maiara\Documents\RAD Studio\Projects\ExercicioDelphi\frmPrincipal.dfm</Transaction>
+    <Transaction>2019/11/17 07:46:33.285.dproj,C:\Users\Maiara\Documents\RAD Studio\Projects\Project2.dproj=C:\Users\Maiara\Documents\RAD Studio\Projects\ExercicioDelphi\ExercicioDelphi.dproj</Transaction>
+    <Transaction>2019/11/17 07:50:18.691.pas,C:\Users\Maiara\Documents\RAD Studio\Projects\ExercicioDelphi\Unit1.pas=C:\Users\Maiara\Documents\RAD Studio\Projects\ExercicioDelphi\uVeiculo.pas</Transaction>
+    <Transaction>2019/11/17 07:52:47.559.pas,C:\Users\Maiara\Documents\RAD Studio\Projects\ExercicioDelphi\Unit1.pas=C:\Users\Maiara\Documents\RAD Studio\Projects\ExercicioDelphi\uTipoEnum.pas</Transaction>
+  </Transactions>
+</BorlandProject>
